@@ -25,11 +25,13 @@ public class SignUpController extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		if(session.getAttribute("sessionMember") != null) { 
+			System.out.println("로그인상태 SignUpController -> LoginController 리다이렉트");
 			response.sendRedirect(request.getContextPath()+"/login");
 			return; //
 			
 		}
 		//로그인상태가아니면 회원가입 뷰로 이동
+		System.out.println("비로그인상태 SignUpController -> signUp.jsp 포워딩");
 		request.getRequestDispatcher("/WEB-INF/view/signUp.jsp").forward(request, response);
 	}
 	//회원가입액션
@@ -43,14 +45,18 @@ public class SignUpController extends HttpServlet {
 		member.setMemberId(memberId);
 		member.setMemberPw(memberPw);
 		
+		System.out.println("SignUpController -> memberService.addMemberByKey 요청");
 		int Cnt = this.memberService.addMemberByKey(member);
 		if(Cnt == 0) {
-			System.out.println("회원가입 실패");
-			
+			System.out.println("SignUpController // 회원가입 실패");
+			System.out.println("회원가입실패 SignUpController -> SignUpController 리다이렉트");
+			response.sendRedirect(request.getContextPath() + "/signUp");
+			return;
+		} else {
+			System.out.println("SignUpController // 회원가입 성공");
 		}
-		System.out.println("회원가입 성공");
 		
+		System.out.println("회원가입완료 SignUpController -> LoginController 리다이렉트");
 		response.sendRedirect(request.getContextPath() + "/login");
 	}
-
 }

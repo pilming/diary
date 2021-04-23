@@ -23,7 +23,10 @@ public class MemberService {
 		
 		try {
 			conn = dbUtil.getConnection();
+			
+			System.out.println("MemberService.modifyMemberByKey -> memberDao.updateMemberByKey 요청");
 			rowCnt = this.memberDao.updateMemberByKey(conn, member);
+			
 			conn.commit();
 		} catch (SQLException e) {
 			try {
@@ -38,25 +41,32 @@ public class MemberService {
 		} finally {
 			dbUtil.close(conn, null, null);
 		}
-		
+		System.out.println("MemberService.modifyMemberByKey 응답");
 		return rowCnt > 0;
 	}
 	//회원가입
 	public int addMemberByKey(Member member) {
-		int returnCnt = 0;
+		
 		this.dbUtil = new DBUtil();
 		this.memberDao = new MemberDao();
 		Connection conn = null;
 		
+		int insertRowCnt =0;
+		
 		try {
 			conn = dbUtil.getConnection();
-			returnCnt = this.memberDao.insertMemberByKey(conn, member);
+			
+			//아이디가 중복되지않을때 회원등록실행
+			System.out.println("MemberService.addMemberByKey -> memberDao.checkMemberById 요청");
+			if(this.memberDao.checkMemberById(conn, member.getMemberId()) == true ) {
+				System.out.println("MemberService.addMemberByKey -> memberDao.insertMemberByKey 요청");
+				insertRowCnt = this.memberDao.insertMemberByKey(conn, member);
+			}
 			conn.commit();
 		} catch (SQLException e) {
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
@@ -65,7 +75,8 @@ public class MemberService {
 			dbUtil.close(conn, null, null);
 		}
 		
-		return returnCnt;
+		System.out.println("MemberService.addMemberByKey 응답");
+		return insertRowCnt;
 		
 	}
 	//회원삭제 성공하면 true(커밋) 실패하면 false(롤백)
@@ -79,8 +90,13 @@ public class MemberService {
 		
 		try {
 			conn = dbUtil.getConnection();
+			
+			System.out.println("MemberService.removeMemberByKey -> todoDao.deleteTodoByMember 요청");
 			todoRowCnt = this.todoDao.deleteTodoByMember(conn, member.getMemberNo());
+			
+			System.out.println("MemberService.removeMemberByKey -> memberDao.removeMemberByKey 요청");
 			memberRowCnt = this.memberDao.deleteMemberByKey(conn, member);
+			
 			conn.commit();
 		} catch (SQLException e) {
 			try {
@@ -91,11 +107,12 @@ public class MemberService {
 			}
 
 			e.printStackTrace();
+			System.out.println("MemberService.removeMemberByKey 응답");
 			return false;
 		} finally {
 			dbUtil.close(conn, null, null);
 		}
-		
+		System.out.println("MemberService.removeMemberByKey 응답");
 		return (todoRowCnt + memberRowCnt) > 0;
 	}
 	
@@ -109,8 +126,11 @@ public class MemberService {
 		try {
 			
 			conn = dbUtil.getConnection();
+			
+			System.out.println("MemberService.getMemberByKey -> memberDao.selectMemberByKey 요청");
 			returnMember = this.memberDao.selectMemberByKey(conn, member);
-			System.out.println(returnMember);
+			
+			System.out.println("MemberService.getMemberByKey returnMember // "+returnMember);
 			conn.commit();
 			
 		} catch(SQLException e) {
@@ -128,6 +148,7 @@ public class MemberService {
 			this.dbUtil.close(conn, null, null);
 			
 		}
+		System.out.println("MemberService.getMemberByKey 응답");
 		return returnMember;
 	}
 }

@@ -17,6 +17,7 @@ public class AuthFilter implements Filter {
 		
 		if(session.getAttribute("sessionMember") == null) { 
 			HttpServletResponse httpResponse = (HttpServletResponse)response;
+			System.out.println("AuthFilter - > LoginController 리다이렉트");
 			httpResponse.sendRedirect(httpRequest.getContextPath()+"/login");
 			return; // 새로운 요청발생으로 doFilter메서드를 종료
 			

@@ -21,7 +21,7 @@ public class TodoDao {
 			//여기서 conn을 닫으면 안됨. 롤백 불가능
 			this.dbUtil.close(null, stmt, null);
 		}
-		
+		System.out.println("TodoDao.deleteTodoByMember 응답");
 		return rowCnt;
 	}
 }
