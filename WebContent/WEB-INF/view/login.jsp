@@ -22,6 +22,7 @@
 				<div><button type = "submit">로그인</button></div>
 			</div>
 		</form>
+		<a href="${pageContext.request.contextPath}/signUp">회원가입</a>
 		
 	</c:if>
 	
@@ -29,7 +30,11 @@
 	<c:if test="${sessionMember != null}">
 	
 		<div>${sessionMember.memberId} 님 반갑습니다.</div>
-		<div><a href="${pageContext.request.contextPath}/auth/logout">로그아웃</a></div>
+		<div>
+			<a href="${pageContext.request.contextPath}/auth/logout">로그아웃</a>
+			<a href="${pageContext.request.contextPath}/auth/modifyMember">정보수정</a>
+			<a href="${pageContext.request.contextPath}/auth/removeMember">탈퇴</a>
+		</div>
 		<div><a href="/auth/">다이어리</a></div>
 		
 	</c:if>

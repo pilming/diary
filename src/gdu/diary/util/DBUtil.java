@@ -37,7 +37,7 @@ public class DBUtil {
 		}
 		if(stmt != null) {
 			try {
-				rs.close();
+				stmt.close();
 				
 			} catch(Exception e) {
 				e.printStackTrace();
