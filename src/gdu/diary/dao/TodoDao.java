@@ -13,15 +13,21 @@ public class TodoDao {
 		PreparedStatement stmt = null;
 		
 		try{
+			//데이터가 빠진 sql 전송
 			stmt = conn.prepareStatement(TodoQuery.DELETE_TODO_BY_MEMBER);
-			stmt.setInt(1, memberNo); 
+			//빠진 ?에 데이터 설정
+			stmt.setInt(1, memberNo);
+			
+			//sql실행
 			rowCnt = stmt.executeUpdate();
 			
 		} finally {
-			//여기서 conn을 닫으면 안됨. 롤백 불가능
+			//conn을 닫아버리면 커밋과 롤백을 할수없음. conn close는 서비스에서 실행
 			this.dbUtil.close(null, stmt, null);
 		}
 		System.out.println("TodoDao.deleteTodoByMember 응답");
+		
+		//삭제성고하면 1 실패하면 0리턴;
 		return rowCnt;
 	}
 }

@@ -20,10 +20,14 @@ public class DiaryController extends HttpServlet {
 		String targetYear = request.getParameter("targetYear"); // "2021",...null
 		String targetMonth = request.getParameter("targetMonth"); // "4",...null
 		
+		//맵에 해당년도,월의 달력을 담음
 		System.out.println("DiaryController -> diaryService.getDiary 요청");
 		Map<String, Object> diaryMap = this.diaryService.getDiary(targetYear, targetMonth);
 		
+		//리퀘스트객체에 달력저장
 		request.setAttribute("diaryMap", diaryMap);
+		
+		//뷰로 포워딩
 		System.out.println("DiaryController -> diary.jsp 포워딩");
 		request.getRequestDispatcher("/WEB-INF/view/auth/diary.jsp").forward(request, response);
 	}
