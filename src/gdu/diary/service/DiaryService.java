@@ -15,43 +15,60 @@ public class DiaryService {
 		// 앞의 빈셀의 갯수 -> startBlank
 		// 이번달 숫자가 나와야 할 셀의 갯수(1~마지막날짜)
 		// 뒤의 빈셀의 갯수 -> endBlank -> (startBlank + endDay)%7 
+		
+		//달력을 담을 맵객체 생성
 		Map<String, Object> map = new HashMap<String, Object>();
+		
+		//캘린더 인스턴스로 날짜 정보가져옴
 		Calendar target = Calendar.getInstance();
 		
+		//초기 연월 초기화
 		int numTargetMonth = 0;
 		int numTargetYear = 0;
+		
+		//get으로 받은 연 월이 있다면 그 정보로 연월 설정
 		if(targetMonth != null && targetYear != null) {
 			numTargetYear = Integer.parseInt(targetYear);
 			numTargetMonth = Integer.parseInt(targetMonth);
+			
+			//전달받은 Month값이 0 이라면 년도에서 1년 빼고 월을 12월로 설정
 			if(numTargetMonth == 0) {
 				numTargetYear = numTargetYear - 1;
 				numTargetMonth = 12;
-			} else if(numTargetMonth == 13) {
+			} else if(numTargetMonth == 13) { //전달받은 Month값이 13 이라면 년도에서 1년 더하고 월을 1월로 설정
 				numTargetYear = numTargetYear + 1;
 				numTargetMonth = 1;
 			}
+			//날짜 정보를 get으로 받은 연 월값으로 변경
 			target.set(Calendar.YEAR, numTargetYear);
-			target.set(Calendar.MONTH, numTargetMonth-1);
+			target.set(Calendar.MONTH, numTargetMonth-1); //캘린더는 0을 1월로 인식하기때문에 우리가 사용하는 월에서 -1해서 저장함
 		}
 		
+		//연 월을 설정했으닌 일을 1일로 설정
 		target.set(Calendar.DATE, 1);
+		
 		// target월의 1숫자앞에 와야할 빈셀의 갯수
 		int startBlank = target.get(Calendar.DAY_OF_WEEK) - 1;
+		
 		// target월의 마지막 날짜
 		int endDay = target.getActualMaximum(Calendar.DATE);
+		
+		//마지막날은 보여주고 남은 칸을 채우기위한 변수
 		int endBlank = 0;
 		if ((startBlank + endDay) % 7 != 0) {
 			endBlank = 7 - (startBlank + endDay)%7;
 		}
 		// int totalCell = startBlank + endDay + endBlank; 
 		
+		//맵에 저장
 		map.put("targetYear", target.get(Calendar.YEAR));
-		map.put("targetMonth", target.get(Calendar.MONTH)+1);
+		map.put("targetMonth", target.get(Calendar.MONTH)+1); //위와 마찬가지로 캘린더는 0을 1월로 인식하기때문에 뷰에서 보여줄때는 +1해서 사람이 알아볼수있게함
 		map.put("startBlank", startBlank);
 		map.put("endDay", endDay);
 		map.put("endBlank", endBlank);
 		
-		System.out.println("DiaryService.getDiary 응답");
+		//맵 리턴
+		System.out.println("DiaryService.getDiary 응답");		
 		return map;
 	}
 }
