@@ -1,11 +1,21 @@
 package gdu.diary.service;
 
+
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import gdu.diary.dao.TodoDao;
+import gdu.diary.util.DBUtil;
+import gdu.diary.vo.Todo;
+
 public class DiaryService {
-	public Map<String, Object> getDiary(String targetYear, String targetMonth) {
+	private DBUtil dbUtil;
+	private TodoDao todoDao;
+	public Map<String, Object> getDiary(int memberNo,String targetYear, String targetMonth) {
 		// 타겟 년, 월, 일(날짜)
 		// 타겟의 1일(날짜)
 		// 타겟의 마지막일의 숫자 -> endDay
@@ -39,6 +49,7 @@ public class DiaryService {
 				numTargetYear = numTargetYear + 1;
 				numTargetMonth = 1;
 			}
+			
 			//날짜 정보를 get으로 받은 연 월값으로 변경
 			target.set(Calendar.YEAR, numTargetYear);
 			target.set(Calendar.MONTH, numTargetMonth-1); //캘린더는 0을 1월로 인식하기때문에 우리가 사용하는 월에서 -1해서 저장함
@@ -66,6 +77,31 @@ public class DiaryService {
 		map.put("startBlank", startBlank);
 		map.put("endDay", endDay);
 		map.put("endBlank", endBlank);
+		
+		//
+		
+		this.todoDao = new TodoDao();
+		this.dbUtil = new DBUtil();
+		List<Todo> todoList = null;
+		Connection conn = null;
+		
+		try {
+			conn = this.dbUtil.getConnection();
+			todoList = this.todoDao.selectTodoListByDate(conn, memberNo,target.get(Calendar.YEAR), target.get(Calendar.MONTH)+1);
+			
+			conn.commit();
+		} catch(SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			
+			e.printStackTrace();
+		}
+		
+		map.put("todoList", todoList);
+		
 		
 		//맵 리턴
 		System.out.println("DiaryService.getDiary 응답");		

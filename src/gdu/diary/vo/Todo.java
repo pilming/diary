@@ -7,6 +7,7 @@ public class Todo {
 	private String todoTitle;
 	private String todoContent;
 	private String todoFontColor;
+	private String todoAddDate;
 	public int getTodoNo() {
 		return todoNo;
 	}
@@ -22,7 +23,6 @@ public class Todo {
 	public String getTodoDate() {
 		return todoDate;
 	}
-	
 	public void setTodoDate(String todoDate) {
 		this.todoDate = todoDate;
 	}
@@ -44,9 +44,17 @@ public class Todo {
 	public void setTodoFontColor(String todoFontColor) {
 		this.todoFontColor = todoFontColor;
 	}
+	public String getTodoAddDate() {
+		return todoAddDate;
+	}
+	public void setTodoAddDate(String todoAddDate) {
+		this.todoAddDate = todoAddDate;
+	}
 	@Override
 	public String toString() {
 		return "Todo [todoNo=" + todoNo + ", memberNo=" + memberNo + ", todoDate=" + todoDate + ", todoTitle="
-				+ todoTitle + ", todoContent=" + todoContent + ", todoFontColor=" + todoFontColor + "]";
+				+ todoTitle + ", todoContent=" + todoContent + ", todoFontColor=" + todoFontColor + ", todoAddDate="
+				+ todoAddDate + "]";
 	}
+	
 }

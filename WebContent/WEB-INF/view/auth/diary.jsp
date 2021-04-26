@@ -7,6 +7,7 @@
 <title>diary</title>
 </head>
 <body>
+	<div>${diaryMap.todoList}</div>
 	<c:set var="totalCell" value="${diaryMap.startBlank + diaryMap.endDay + diaryMap.endBlank}"></c:set>
 	<div>totalCell : ${totalCell}</div>
 	
@@ -30,8 +31,18 @@
 				<c:set var="num" value="${i-diaryMap.startBlank}"></c:set>
 				<td>
 					<c:if test="${num > 0 && num <= diaryMap.endDay}">
-						<a href="${pageContext.request.contextPath}/auth/addTodo">
-							${num}
+						<a href="${pageContext.request.contextPath}/auth/addTodo?year=${diaryMap.targetYear}&month=${diaryMap.targetMonth}&day=${num}">
+							<div>${num}</div>
+							<div>
+		                        <c:forEach var="todo" items="${diaryMap.todoList}">
+		                           <c:if test="${todo.todoDate == num}">
+		                              <div style="background-color: ${todo.todoFontColor}">
+		                              	<a href="${pageContext.request.contextPath}/auth/todoOne?todoNo=${todo.todoNo}">${todo.todoTitle}...</a>
+		                              </div>
+		                              <!-- todoOne 만들기 수정,삭제 -->
+		                           </c:if>
+	                        	</c:forEach>
+                     		</div>
 						</a>
 					</c:if>
 					<c:if test="${num <= 0 || num > diaryMap.endDay}">

@@ -46,7 +46,8 @@ public class MemberDao {
 			
 		} finally {
 			//conn을 닫아버리면 커밋과 롤백을 할수없음. conn close는 서비스에서 실행
-			this.dbUtil.close(null, stmt, rs);
+			stmt.close();
+			rs.close();
 		}
 		//디버깅코드
 		System.out.println("MemberDao.checkMemberById // 아이디중복!");
@@ -76,8 +77,7 @@ public class MemberDao {
 			returnRowCnt = stmt.executeUpdate();
 			
 		} finally {
-			//conn을 닫아버리면 커밋과 롤백을 할수없음. conn close는 서비스에서 실행
-			this.dbUtil.close(null, stmt, null);
+			stmt.close();
 		}
 		System.out.println("MemberDao.updateMemberByKey 응답");
 		
@@ -106,7 +106,7 @@ public class MemberDao {
 			
 		} finally {
 			//conn을 닫아버리면 커밋과 롤백을 할수없음. conn close는 서비스에서 실행
-			this.dbUtil.close(null, stmt, null);
+			stmt.close();
 		}
 		System.out.println("MemberDao.insertMemberByKey 응답");
 		//변경성공하면 1 실패하면 0 리턴;
@@ -134,7 +134,7 @@ public class MemberDao {
 			
 		} finally {
 			//conn을 닫아버리면 커밋과 롤백을 할수없음. conn close는 서비스에서 실행
-			this.dbUtil.close(null, stmt, null);
+			stmt.close();
 		}
 		System.out.println("MemberDao.deleteMemberByKey 응답");
 		//변경성공하면 1 실패하면 0 리턴;
@@ -170,7 +170,8 @@ public class MemberDao {
 			
 		} finally {
 			//conn을 닫아버리면 커밋과 롤백을 할수없음. conn close는 서비스에서 실행
-			this.dbUtil.close(null, stmt, rs);
+			stmt.close();
+			rs.close();
 			
 		}
 		System.out.println("MemberDao.selectMemberByKey 응답");

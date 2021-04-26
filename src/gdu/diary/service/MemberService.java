@@ -13,7 +13,6 @@ public class MemberService {
 	private DBUtil dbUtil;
 	private MemberDao memberDao;
 	private TodoDao todoDao;
-	
 	//회원정보 수정(성공하면 true 실패하면 false)
 	public boolean modifyMemberByKey(Member member) {
 		this.dbUtil = new DBUtil();
@@ -46,7 +45,11 @@ public class MemberService {
 		} finally {
 			
 			//서비스에서 커넥션 사용이 끝났기때문에 커넥션을 닫아준다.
-			dbUtil.close(conn, null, null);
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		//정상적으로 수정이 됐다면 rowCnt에 1이 있고 수정이 안됐다면 0이 있음
@@ -86,7 +89,11 @@ public class MemberService {
 			e.printStackTrace();
 		} finally {
 			//커넥션 사용 종료후 커넥션 닫아주기
-			dbUtil.close(conn, null, null);
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		//결과 리턴 이런 단순 인트반환과 불리언 반환... 하나로 통일하는게 나을까?
@@ -132,7 +139,11 @@ public class MemberService {
 			return false;
 		} finally {
 			//커넥션 사용 종료후 닫아주기
-			dbUtil.close(conn, null, null);
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		//로그인 된 상태에서 회원삭제가 진행되기때문에 투두리스트와 멤버가 존재하지않아서 둘의 합이 0일 가능성 없음.
 		System.out.println("MemberService.removeMemberByKey 응답");
@@ -173,7 +184,11 @@ public class MemberService {
 			
 		} finally {
 			//커넥션 사용 종료후 닫아주기
-			this.dbUtil.close(conn, null, null);
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			
 		}
 		//dao에서 찾은 멤버정보 리턴
