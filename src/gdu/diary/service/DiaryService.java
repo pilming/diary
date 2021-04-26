@@ -3,6 +3,7 @@ package gdu.diary.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.Year;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -30,8 +31,34 @@ public class DiaryService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		//캘린더 인스턴스로 날짜 정보가져옴
-		Calendar target = Calendar.getInstance();
+		Calendar target = Calendar.getInstance(); //현재 달
+		Calendar preTarget = Calendar.getInstance(); // 이전 달
+		Calendar postTarget = Calendar.getInstance(); //다음 달
+	
+		if(targetYear != null && targetMonth != null) {
+			
+			//System.out.println("@@@@@@@@targetYear : " + targetYear);
+			target.set(Calendar.YEAR, Integer.parseInt(targetYear));
+			//System.out.println("@@@@@@@@targetMonth : " +targetMonth);
+			target.set(Calendar.MONTH, Integer.parseInt(targetMonth)); //캘린더가 자동으로 targetMonth가 -1 이면 년도 -1하고 월을 11로(우리가볼땐 12월) 설정, targetMonth이 12일경우 자동으로 년도 +1 하고 월을 0으로(우리가볼땐 1월) 
+
+		}
 		
+		//이전달 다음달 년 월 설정
+		preTarget.set(Calendar.YEAR, target.get(Calendar.YEAR));
+		preTarget.set(Calendar.MONTH, target.get(Calendar.MONTH)-1); //이전 달
+		preTarget.set(Calendar.DATE, 1);//1일로 설정
+		
+		postTarget.set(Calendar.YEAR, target.get(Calendar.YEAR));
+		postTarget.set(Calendar.MONTH,  target.get(Calendar.MONTH)+1); //다음 달
+		postTarget.set(Calendar.DATE, 1);//1일로 설정
+		
+
+		/* 
+		 * 
+		 * 위의 캘린터 클래스 내부적으로 아래의 코드와 비슷한 코드가 진행된다.
+		 * 
+		 * 
 		//초기 연월 초기화
 		int numTargetMonth = 0;
 		int numTargetYear = 0;
@@ -54,8 +81,12 @@ public class DiaryService {
 			target.set(Calendar.YEAR, numTargetYear);
 			target.set(Calendar.MONTH, numTargetMonth-1); //캘린더는 0을 1월로 인식하기때문에 우리가 사용하는 월에서 -1해서 저장함
 		}
+		*/
 		
-		//연 월을 설정했으닌 일을 1일로 설정
+		//이전달의 마지막날
+		int preMonthEndDay = preTarget.getActualMaximum(Calendar.DATE);
+		
+		//target월을 1일로 설정
 		target.set(Calendar.DATE, 1);
 		
 		// target월의 1숫자앞에 와야할 빈셀의 갯수
@@ -72,10 +103,21 @@ public class DiaryService {
 		// int totalCell = startBlank + endDay + endBlank; 
 		
 		//맵에 저장
+		//이전달
+		map.put("preTargetYear", preTarget.get(Calendar.YEAR));
+		map.put("preTargetMonth", preTarget.get(Calendar.MONTH));
+		
+		//보여줄 달
 		map.put("targetYear", target.get(Calendar.YEAR));
-		map.put("targetMonth", target.get(Calendar.MONTH)+1); //위와 마찬가지로 캘린더는 0을 1월로 인식하기때문에 뷰에서 보여줄때는 +1해서 사람이 알아볼수있게함
+		map.put("targetMonth", target.get(Calendar.MONTH));
+		
+		//다음달
+		map.put("postTargetYear", postTarget.get(Calendar.YEAR));
+		map.put("postTargetMonth", postTarget.get(Calendar.MONTH));
+		
 		map.put("startBlank", startBlank);
 		map.put("endDay", endDay);
+		map.put("preMonthEndDay", preMonthEndDay); //이전달의 마지막날
 		map.put("endBlank", endBlank);
 		
 		//
@@ -83,11 +125,15 @@ public class DiaryService {
 		this.todoDao = new TodoDao();
 		this.dbUtil = new DBUtil();
 		List<Todo> todoList = null;
+		List<Todo> preMonthTodoList = null;
+		List<Todo> postMonthTodoList = null;
 		Connection conn = null;
 		
 		try {
 			conn = this.dbUtil.getConnection();
-			todoList = this.todoDao.selectTodoListByDate(conn, memberNo,target.get(Calendar.YEAR), target.get(Calendar.MONTH)+1);
+			todoList = this.todoDao.selectTodoListByDate(conn, memberNo,target.get(Calendar.YEAR), target.get(Calendar.MONTH)+1); //db에서 검색할때는 Calendar표기가 아닌 일반적인 표기로 전달
+			preMonthTodoList = this.todoDao.selectTodoListByDate(conn, memberNo, preTarget.get(Calendar.YEAR), preTarget.get(Calendar.MONTH)+1);
+			postMonthTodoList = this.todoDao.selectTodoListByDate(conn, memberNo, postTarget.get(Calendar.YEAR), postTarget.get(Calendar.MONTH)+1);
 			
 			conn.commit();
 		} catch(SQLException e) {
@@ -100,8 +146,9 @@ public class DiaryService {
 			e.printStackTrace();
 		}
 		
-		map.put("todoList", todoList);
-		
+		map.put("todoList", todoList); //target월의 todoList
+		map.put("preMonthTodoList", preMonthTodoList); //preTarget월의 todoList
+		map.put("postMonthTodoList", postMonthTodoList); //postTarget월의 todoList
 		
 		//맵 리턴
 		System.out.println("DiaryService.getDiary 응답");		

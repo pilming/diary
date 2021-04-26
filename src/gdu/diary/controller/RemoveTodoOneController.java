@@ -22,6 +22,7 @@ public class RemoveTodoOneController extends HttpServlet {
 		this.todoService = new TodoService();
 		
 		int todoNo = Integer.parseInt(request.getParameter("todoNo"));
+		String todoDate = request.getParameter("todoDate");
 		
 		//todoService로 요청
 		boolean result = this.todoService.removeTodoOne(todoNo, memberNo);
@@ -32,9 +33,12 @@ public class RemoveTodoOneController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/auth/todoOne?todoNo="+todoNo);
 			return;
 		}
+		
+		String[] arr = todoDate.split("-");
+		
 		//삭제성공시 로그아웃컨트롤러로 리다이렉트
-		System.out.println("회원탈퇴성공 RemoveTodoOneController -> DiaryController 리다이렉트");
-		response.sendRedirect(request.getContextPath()+"/auth/diary");
+		System.out.println("todo삭제성공 RemoveTodoOneController -> DiaryController 리다이렉트");
+		response.sendRedirect(request.getContextPath()+"/auth/diary?targetYear="+arr[0]+"&targetMonth="+(Integer.parseInt(arr[1])-1));
 	}
 
 }

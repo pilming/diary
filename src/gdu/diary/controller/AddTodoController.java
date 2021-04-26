@@ -73,7 +73,7 @@ public class AddTodoController extends HttpServlet {
 		String[] arr = todoDate.split("-");
 		
 		//다이어리 컨트롤러로 년월 넘겨주면 리다이렉트
-		response.sendRedirect(request.getContextPath()+"/auth/diary?targetYear="+arr[0]+"&targetMonth="+(Integer.parseInt(arr[1])));
+		response.sendRedirect(request.getContextPath()+"/auth/diary?targetYear="+arr[0]+"&targetMonth="+(Integer.parseInt(arr[1])-1));
 		
 	}
 }

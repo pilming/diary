@@ -25,7 +25,7 @@ public class DiaryController extends HttpServlet {
 		//받은데이터
 		String targetYear = request.getParameter("targetYear"); // "2021",...null
 		String targetMonth = request.getParameter("targetMonth"); // "4월이면 3, 5월이면 4,...null
-		
+		System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"+targetYear+"-"+targetMonth);
 		//맵에 해당년도,월의 달력을 담음
 		System.out.println("DiaryController -> diaryService.getDiary 요청");
 		Map<String, Object> diaryMap = this.diaryService.getDiary(memberNo, targetYear, targetMonth);

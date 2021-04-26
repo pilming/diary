@@ -32,6 +32,6 @@
 		</tr>
 	</table>
 	<a href="${pageContext.request.contextPath}/auth/modifyTodoOne?todoNo=${todoOne.todoNo}"><button>todo수정</button></a>
-	<a href="${pageContext.request.contextPath}/auth/removeTodoOne?todoNo=${todoOne.todoNo}"><button>todo삭제</button></a>
+	<a href="${pageContext.request.contextPath}/auth/removeTodoOne?todoNo=${todoOne.todoNo}&todoDate=${todoOne.todoDate}"><button>todo삭제</button></a>
 </body>
 </html>
