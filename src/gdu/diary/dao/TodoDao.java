@@ -77,7 +77,6 @@ public class TodoDao {
 			rs = stmt.executeQuery();
 			//SELECT todo_date todoDate, todo_title todoTitle, todo_content todoContent, todo_font_color todoFontColor, todo_add_date todoAddDate FROM todo WHERE member_no = ? AND todoNo = ?
 			if(rs.next()) {
-				System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 				returnTodoOne.setTodoNo(todoNo);
 				returnTodoOne.setTodoDate(rs.getString("todoDate"));
 				returnTodoOne.setTodoTitle(rs.getString("todoTitle"));
@@ -86,9 +85,7 @@ public class TodoDao {
 				returnTodoOne.setTodoAddDate(rs.getString("todoAddDate"));
 			}
 		}finally {
-			if(rs != null) {
-				rs.close();
-			}
+			rs.close();
 			stmt.close();
 		}
 		
