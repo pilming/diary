@@ -7,6 +7,27 @@
 <title>diary</title>
 </head>
 <body>
+	<h1>DDAY List</h1>
+	<div>
+		<table border = "1">
+			<tr>
+				<th>todoDate</th>
+				<th>todoTitle</th>
+				<th>dday</th>
+			</tr>
+			<c:forEach var = "m" items="${diaryMap.ddayList}">
+				<tr>
+					<td>${m.todoDate}</td>
+					<td>
+						<a href="${pageContext.request.contextPath}/auth/todoOne?todoNo=${m.todoNo}">
+							${m.todoTitle}
+						</a>
+					</td>
+					<td>-${m.dday}</td>
+				</tr>
+			</c:forEach>
+		</table>
+	</div>
 	<c:set var="totalCell" value="${diaryMap.startBlank + diaryMap.endDay + diaryMap.endBlank}"></c:set>
 	<div>totalCell : ${totalCell}</div>
 	

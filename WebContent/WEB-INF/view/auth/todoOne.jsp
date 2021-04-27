@@ -7,7 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<div>${todoOne}</div>
 	<h1>todoOne</h1>
 	<table border = "1">
 		<tr>

@@ -7,6 +7,7 @@ public class TodoQuery {
 	public final static String SELECT_TODO_ONE_BY_NO;
 	public final static String UPDATE_TODO;
 	public final static String DELETE_TODO;
+	public final static String SELECT_TODO_DDAY_LIST;
 	
 	
 	static {
@@ -16,5 +17,6 @@ public class TodoQuery {
 		SELECT_TODO_ONE_BY_NO = "SELECT todo_date todoDate, todo_title todoTitle, todo_content todoContent, todo_font_color todoFontColor, todo_add_date todoAddDate FROM todo WHERE todo_no = ? AND member_no = ?";
 		UPDATE_TODO = "UPDATE todo SET todo_title = ?, todo_content = ?, todo_font_color = ? WHERE todo_no=? AND member_no = ?";
 		DELETE_TODO = "DELETE FROM todo WHERE todo_no=? AND member_no = ?";
+		SELECT_TODO_DDAY_LIST = "SELECT todo_no todoNo,todo_date todoDate,todo_title todoTitle,DATEDIFF(todo_date,DATE(NOW())) dday FROM todo WHERE todo_date > DATE(NOW()) AND member_no=? LIMIT 10";
 	}
 }

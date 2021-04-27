@@ -120,13 +120,15 @@ public class DiaryService {
 		map.put("preMonthEndDay", preMonthEndDay); //이전달의 마지막날
 		map.put("endBlank", endBlank);
 		
-		//
+		//투두리스트와 dday추카
 		
 		this.todoDao = new TodoDao();
 		this.dbUtil = new DBUtil();
 		List<Todo> todoList = null;
 		List<Todo> preMonthTodoList = null;
 		List<Todo> postMonthTodoList = null;
+		
+		List<Map<String, Object>> ddayList = null;
 		Connection conn = null;
 		
 		try {
@@ -134,6 +136,8 @@ public class DiaryService {
 			todoList = this.todoDao.selectTodoListByDate(conn, memberNo,target.get(Calendar.YEAR), target.get(Calendar.MONTH)+1); //db에서 검색할때는 Calendar표기가 아닌 일반적인 표기로 전달
 			preMonthTodoList = this.todoDao.selectTodoListByDate(conn, memberNo, preTarget.get(Calendar.YEAR), preTarget.get(Calendar.MONTH)+1);
 			postMonthTodoList = this.todoDao.selectTodoListByDate(conn, memberNo, postTarget.get(Calendar.YEAR), postTarget.get(Calendar.MONTH)+1);
+			
+			ddayList = this.todoDao.selectTodoDdayList(conn, memberNo);
 			
 			conn.commit();
 		} catch(SQLException e) {
@@ -149,6 +153,7 @@ public class DiaryService {
 		map.put("todoList", todoList); //target월의 todoList
 		map.put("preMonthTodoList", preMonthTodoList); //preTarget월의 todoList
 		map.put("postMonthTodoList", postMonthTodoList); //postTarget월의 todoList
+		map.put("ddayList", ddayList); //
 		
 		//맵 리턴
 		System.out.println("DiaryService.getDiary 응답");		
