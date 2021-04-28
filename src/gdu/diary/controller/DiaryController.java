@@ -19,6 +19,7 @@ public class DiaryController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		this.diaryService = new DiaryService();
 		
+		//세션에서 멤버정보 받아오기
 		HttpSession session = request.getSession();
 		int memberNo = ((Member)(session.getAttribute("sessionMember"))).getMemberNo();
 		

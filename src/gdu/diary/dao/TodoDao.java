@@ -23,6 +23,9 @@ public class TodoDao {
 		try {
 			stmt = conn.prepareStatement(TodoQuery.SELECT_TODO_DDAY_LIST);
 			stmt.setInt(1, memberNo);
+			//디버깅코드.
+			System.out.println("TodoDao.selectTodoDdayList stmt // "+ stmt);
+			
 			rs = stmt.executeQuery();
 			while(rs.next()) {
 				Map<String, Object> map = new HashMap<>();
@@ -33,9 +36,13 @@ public class TodoDao {
 				list.add(map);
 			}
 		} finally {
-			rs.close(); // 김태O씨 이슈
+			//여기서는 conn close하면 안됨. 닫아버리면 커밋과 롤백을 할수없음. conn close는 서비스에서 실행
+			
+			rs.close(); // rs가 null일경우 예외발생하지만 어차피 나중에 rs를 쓰지않을것임으로 그냥 무시.
 			stmt.close();
 		}
+		
+		System.out.println("TodoDao.selectTodoDdayList 응답");
 		return list;
 	}
 	
@@ -86,6 +93,7 @@ public class TodoDao {
 			stmt.close();
 		}
 		
+		System.out.println("TodoDao.updateTodoOne 응답");
 		return returnRowCnt;
 	}
 	
@@ -116,6 +124,7 @@ public class TodoDao {
 			stmt.close();
 		}
 		
+		System.out.println("TodoDao.selectTodoOne 응답");
 		return returnTodoOne;
 	}
 	
@@ -146,6 +155,7 @@ public class TodoDao {
 			stmt.close();
 		}
 		
+		System.out.println("TodoDao.selectTodoListByDate 응답");
 		return returnList;
 	}
 	
@@ -167,7 +177,7 @@ public class TodoDao {
 		} finally{
 			stmt.close();
 		}
-		
+		System.out.println("TodoDao.insertTodo 응답");
 		return returnRowCnt;
 	}
 	

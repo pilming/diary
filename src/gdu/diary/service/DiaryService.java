@@ -133,15 +133,28 @@ public class DiaryService {
 		
 		try {
 			conn = this.dbUtil.getConnection();
+			
+			//현재 보여주기위한 달의 todoList
+			System.out.println("DiaryService.getDiary -> todoDao.selectTodoListByDate 요청");
 			todoList = this.todoDao.selectTodoListByDate(conn, memberNo,target.get(Calendar.YEAR), target.get(Calendar.MONTH)+1); //db에서 검색할때는 Calendar표기가 아닌 일반적인 표기로 전달
+			
+			//이전 달의 todoList
+			System.out.println("DiaryService.getDiary -> todoDao.selectTodoListByDate 요청");
 			preMonthTodoList = this.todoDao.selectTodoListByDate(conn, memberNo, preTarget.get(Calendar.YEAR), preTarget.get(Calendar.MONTH)+1);
+			
+			//다음달의 todoList
+			System.out.println("DiaryService.getDiary -> todoDao.selectTodoListByDate 요청");
 			postMonthTodoList = this.todoDao.selectTodoListByDate(conn, memberNo, postTarget.get(Calendar.YEAR), postTarget.get(Calendar.MONTH)+1);
 			
+			//디데이 정보 가져오기
+			System.out.println("DiaryService.getDiary -> todoDao.selectTodoDdayList 요청");
 			ddayList = this.todoDao.selectTodoDdayList(conn, memberNo);
 			
+			//여기까지 문제없이 진행된다면 커밋
 			conn.commit();
 		} catch(SQLException e) {
 			try {
+				//예외가 발생한다면 롤백, 여기선 전부 select쿼리라서 롤백이 굳이 필요하지않지만 약속으로 넣기
 				conn.rollback();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
@@ -153,7 +166,7 @@ public class DiaryService {
 		map.put("todoList", todoList); //target월의 todoList
 		map.put("preMonthTodoList", preMonthTodoList); //preTarget월의 todoList
 		map.put("postMonthTodoList", postMonthTodoList); //postTarget월의 todoList
-		map.put("ddayList", ddayList); //
+		map.put("ddayList", ddayList); // dday정보 리턴 할 맵에 저장
 		
 		//맵 리턴
 		System.out.println("DiaryService.getDiary 응답");		
